@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      * {
+        border: 0;
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      :root {
+        font-size: calc(20px + (30 - 20) * (100vw - 320px) / (1280 - 320));
+      }
+
+      body,
+      input {
+        font: 1em/1.5 Oswald, Impact, sans-serif;
+      }
+
+      body {
+        background: #b9b548;
+        color: #1a1a1a;
+        display: flex;
+        height: 100vh;
+      }
+
+      form {
+        margin: auto;
+        padding: 1.5em 0;
+      }
+
+      .longcat {
+        margin-bottom: 0.5em;
+        position: relative;
+        width: 9em;
+        height: 4em;
+      }
+      .longcat__torso,
+      .longcat__torso:before,
+      .longcat__torso:after,
+      .longcat__input,
+      .longcat__value,
+      .longcat__sr {
+        position: absolute;
+      }
+      .longcat__torso,
+      .longcat__torso:before,
+      .longcat__torso:after {
+        content: "";
+        display: block;
+      }
+      .longcat__torso {
+        border-radius: 0.5em 0 0.25em 0;
+        top: 0.875em;
+        height: 1em;
+      }
+      .longcat__torso,
+      .longcat__torso:after {
+        left: 0;
+      }
+      .longcat__torso:before {
+        border-radius: 0.5em;
+        top: 0;
+        left: -1em;
+        width: 1.5em;
+        height: 0.25em;
+        transform: rotate(-40deg);
+        transform-origin: 1.375em 0.125em;
+        transition: transform 0.25s ease-in-out;
+        z-index: -1;
+      }
+      .longcat__torso:after {
+        top: 0.75em;
+        width: 1em;
+        height: 0.875em;
+      }
+      .longcat__input {
+        background-color: transparent;
+        box-shadow: 1px 0 0 #404040;
+        cursor: pointer;
+        height: 2.5em;
+        width: 100%;
+        z-index: 1;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        -webkit-tap-highlight-color: transparent;
+      }
+      .longcat__input:focus {
+        outline: transparent;
+      }
+      .longcat__input::-moz-focus-outer {
+        border: 0;
+      }
+      .longcat__input:active + .longcat__torso:before,
+      .longcat__input:focus + .longcat__torso:before {
+        transform: rotate(15deg);
+      }
+      .longcat__value {
+        top: 2.5em;
+        left: 0;
+        text-align: center;
+        width: 100%;
+      }
+      .longcat__sr {
+        clip: rect(1px, 1px, 1px, 1px);
+        overflow: hidden;
+        width: 1px;
+        height: 1px;
+      }
+      .longcat--light .longcat__torso {
+        box-shadow: 0 -0.25em 0 #d9d9d9 inset;
+      }
+      .longcat--light .longcat__torso,
+      .longcat--light .longcat__torso:before {
+        background-color: white;
+      }
+      .longcat--light .longcat__torso:before {
+        box-shadow: 0 -0.1em 0 #d9d9d9 inset;
+      }
+      .longcat--light .longcat__torso:after {
+        background: radial-gradient(
+            0.5em 1.75em at 0.25em -0.1em,
+            white 47%,
+            rgba(255, 255, 255, 0) 50%
+          ),
+          radial-gradient(
+            0.5em 1.75em at 0.25em 0,
+            #d9d9d9 47%,
+            rgba(217, 217, 217, 0) 50%
+          ),
+          radial-gradient(
+            0.5em 1.75em at 0.65em 0,
+            #d9d9d9 47%,
+            rgba(217, 217, 217, 0) 50%
+          );
+        background-repeat: no-repeat;
+      }
+      .longcat--light .longcat__input::-webkit-slider-thumb {
+        background: radial-gradient(
+            0.2em 0.4em at 0.75em 0.875em,
+            #1a1a1a 45%,
+            rgba(26, 26, 26, 0) 50%
+          ),
+          radial-gradient(
+            0.5em 0.5em at 0.75em 0.875em,
+            #9fbfdf 47%,
+            rgba(159, 191, 223, 0) 50%
+          ),
+          radial-gradient(
+            0.2em 0.4em at 1.5em 0.875em,
+            #1a1a1a 45%,
+            rgba(26, 26, 26, 0) 50%
+          ),
+          radial-gradient(
+            0.5em 0.5em at 1.5em 0.875em,
+            #9fbfdf 47%,
+            rgba(159, 191, 223, 0) 50%
+          ),
+          radial-gradient(
+            0.45em 0.4em at 0.875em 1.325em,
+            white 47%,
+            rgba(255, 255, 255, 0) 50%
+          ),
+          radial-gradient(
+            0.45em 0.4em at 1.375em 1.325em,
+            white 47%,
+            rgba(255, 255, 255, 0) 50%
+          ),
+          radial-gradient(
+            0.5em 0.4em at 0.925em 1.375em,
+            #d9d9d9 47%,
+            rgba(217, 217, 217, 0) 50%
+          ),
+          radial-gradient(
+            0.5em 0.4em at 1.325em 1.375em,
+            #d9d9d9 47%,
+            rgba(217, 217, 217, 0) 50%
+          ),
+          radial-gradient(
+            0.375em 0.375em at 1.125em 1.25em,
+            #e69999 47%,
+            rgba(230, 153, 153, 0) 50%
+          ),
+          radial-gradient(
+            2em 1.5em at 50% 1em,
+            white 47%,
+            rgba(255, 255, 255, 0) 50%
+          ),
+          radial-gradient(
+            2em 1.5em at 50% 1.1em,
+            #d9d9d9 47%,
+            rgba(217, 217, 217, 0) 50%
+          ),
+          radial-gradient(
+            0.5em 1.5em at 0.375em 0.75em,
+            #e69999 39%,
+            white 40% 48%,
+            rgba(255, 255, 255, 0) 50%
+          ),
+          radial-gradient(
+            0.5em 1.5em at 1.5em 0.75em,
+            #e69999 39%,
+            white 40% 48%,
+            rgba(255, 255, 255, 0) 50%
+          ),
+          radial-gradient(
+            0.5em 1.75em at 0.25em 1.5em,
+            white 47%,
+            rgba(255, 255, 255, 0) 50%
+          ),
+          radial-gradient(
+            0.5em 1.75em at 0.25em 1.6em,
+            #d9d9d9 47%,
+            rgba(217, 217, 217, 0) 50%
+          ),
+          radial-gradient(
+            0.5em 1.75em at 0.65em 1.6em,
+            #d9d9d9 47%,
+            rgba(217, 217, 217, 0) 50%
+          );
+        background-repeat: no-repeat;
+        border: 0;
+        width: 2em;
+        height: 2.5em;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+      }
+      .longcat--light .longcat__input::-moz-range-thumb {
+        background: radial-gradient(
+            0.2em 0.4em at 0.75em 0.875em,
+            #1a1a1a 45%,
+            rgba(26, 26, 26, 0) 50%
+          ),
+          radial-gradient(
+            0.5em 0.5em at 0.75em 0.875em,
+            #9fbfdf 47%,
+            rgba(159, 191, 223, 0) 50%
+          ),
+          radial-gradient(
+            0.2em 0.4em at 1.5em 0.875em,
+            #1a1a1a 45%,
+            rgba(26, 26, 26, 0) 50%
+          ),
+          radial-gradient(
+            0.5em 0.5em at 1.5em 0.875em,
+            #9fbfdf 47%,
+            rgba(159, 191, 223, 0) 50%
+          ),
+          radial-gradient(
+            0.45em 0.4em at 0.875em 1.325em,
+            white 47%,
+            rgba(255, 255, 255, 0) 50%
+          ),
+          radial-gradient(
+            0.45em 0.4em at 1.375em 1.325em,
+            white 47%,
+            rgba(255, 255, 255, 0) 50%
+          ),
+          radial-gradient(
+            0.5em 0.4em at 0.925em 1.375em,
+            #d9d9d9 47%,
+            rgba(217, 217, 217, 0) 50%
+          ),
+          radial-gradient(
+            0.5em 0.4em at 1.325em 1.375em,
+            #d9d9d9 47%,
+            rgba(217, 217, 217, 0) 50%
+          ),
+          radial-gradient(
+            0.375em 0.375em at 1.125em 1.25em,
+            #e69999 47%,
+            rgba(230, 153, 153, 0) 50%
+          ),
+          radial-gradient(
+            2em 1.5em at 50% 1em,
+            white 47%,
+            rgba(255, 255, 255, 0) 50%
+          ),
+          radial-gradient(
+            2em 1.5em at 50% 1.1em,
+            #d9d9d9 47%,
+            rgba(217, 217, 217, 0) 50%
+          ),
+          radial-gradient(
+            0.5em 1.5em at 0.375em 0.75em,
+            #e69999 39%,
+            white 40% 48%,
+            rgba(255, 255, 255, 0) 50%
+          ),
+          radial-gradient(
+            0.5em 1.5em at 1.5em 0.75em,
+            #e69999 39%,
+            white 40% 48%,
+            rgba(255, 255, 255, 0) 50%
+          ),
+          radial-gradient(
+            0.5em 1.75em at 0.25em 1.5em,
+            white 47%,
+            rgba(255, 255, 255, 0) 50%
+          ),
+          radial-gradient(
+            0.5em 1.75em at 0.25em 1.6em,
+            #d9d9d9 47%,
+            rgba(217, 217, 217, 0) 50%
+          ),
+          radial-gradient(
+            0.5em 1.75em at 0.65em 1.6em,
+            #d9d9d9 47%,
+            rgba(217, 217, 217, 0) 50%
+          );
+        background-repeat: no-repeat;
+        border: 0;
+        width: 2em;
+        height: 2.5em;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+      }
+      .longcat--dark .longcat__torso {
+        box-shadow: 0 -0.25em 0 #1a1a1a inset;
+      }
+      .longcat--dark .longcat__torso,
+      .longcat--dark .longcat__torso:before {
+        background-color: #404040;
+      }
+      .longcat--dark .longcat__torso:before {
+        box-shadow: 0 -0.1em 0 #1a1a1a inset;
+      }
+      .longcat--dark .longcat__torso:after {
+        background: radial-gradient(
+            0.5em 1.75em at 0.25em -0.1em,
+            #404040 47%,
+            rgba(64, 64, 64, 0) 50%
+          ),
+          radial-gradient(
+            0.5em 1.75em at 0.25em 0,
+            #1a1a1a 47%,
+            rgba(26, 26, 26, 0) 50%
+          ),
+          radial-gradient(
+            0.5em 1.75em at 0.65em 0,
+            #1a1a1a 47%,
+            rgba(26, 26, 26, 0) 50%
+          );
+        background-repeat: no-repeat;
+      }
+      .longcat--dark .longcat__input::-webkit-slider-thumb {
+        background: radial-gradient(
+            0.2em 0.4em at 0.75em 0.875em,
+            #1a1a1a 45%,
+            rgba(26, 26, 26, 0) 50%
+          ),
+          radial-gradient(
+            0.5em 0.5em at 0.75em 0.875em,
+            #bfdf9f 47%,
+            rgba(191, 223, 159, 0) 50%
+          ),
+          radial-gradient(
+            0.2em 0.4em at 1.5em 0.875em,
+            #1a1a1a 45%,
+            rgba(26, 26, 26, 0) 50%
+          ),
+          radial-gradient(
+            0.5em 0.5em at 1.5em 0.875em,
+            #bfdf9f 47%,
+            rgba(191, 223, 159, 0) 50%
+          ),
+          radial-gradient(
+            0.45em 0.4em at 0.875em 1.325em,
+            #404040 47%,
+            rgba(64, 64, 64, 0) 50%
+          ),
+          radial-gradient(
+            0.45em 0.4em at 1.375em 1.325em,
+            #404040 47%,
+            rgba(64, 64, 64, 0) 50%
+          ),
+          radial-gradient(
+            0.5em 0.4em at 0.925em 1.375em,
+            #1a1a1a 47%,
+            rgba(26, 26, 26, 0) 50%
+          ),
+          radial-gradient(
+            0.5em 0.4em at 1.325em 1.375em,
+            #1a1a1a 47%,
+            rgba(26, 26, 26, 0) 50%
+          ),
+          radial-gradient(
+            0.375em 0.375em at 1.125em 1.25em,
+            #e69999 47%,
+            rgba(230, 153, 153, 0) 50%
+          ),
+          radial-gradient(
+            2em 1.5em at 50% 1em,
+            #404040 47%,
+            rgba(64, 64, 64, 0) 50%
+          ),
+          radial-gradient(
+            2em 1.5em at 50% 1.1em,
+            #1a1a1a 47%,
+            rgba(26, 26, 26, 0) 50%
+          ),
+          radial-gradient(
+            0.5em 1.5em at 0.375em 0.75em,
+            #e69999 39%,
+            #404040 40% 48%,
+            rgba(64, 64, 64, 0) 50%
+          ),
+          radial-gradient(
+            0.5em 1.5em at 1.5em 0.75em,
+            #e69999 39%,
+            #404040 40% 48%,
+            rgba(64, 64, 64, 0) 50%
+          ),
+          radial-gradient(
+            0.5em 1.75em at 0.25em 1.5em,
+            #404040 47%,
+            rgba(64, 64, 64, 0) 50%
+          ),
+          radial-gradient(
+            0.5em 1.75em at 0.25em 1.6em,
+            #1a1a1a 47%,
+            rgba(26, 26, 26, 0) 50%
+          ),
+          radial-gradient(
+            0.5em 1.75em at 0.65em 1.6em,
+            #1a1a1a 47%,
+            rgba(26, 26, 26, 0) 50%
+          );
+        background-repeat: no-repeat;
+        border: 0;
+        width: 2em;
+        height: 2.5em;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+      }
+      .longcat--dark .longcat__input::-moz-range-thumb {
+        background: radial-gradient(
+            0.2em 0.4em at 0.75em 0.875em,
+            #1a1a1a 45%,
+            rgba(26, 26, 26, 0) 50%
+          ),
+          radial-gradient(
+            0.5em 0.5em at 0.75em 0.875em,
+            #bfdf9f 47%,
+            rgba(191, 223, 159, 0) 50%
+          ),
+          radial-gradient(
+            0.2em 0.4em at 1.5em 0.875em,
+            #1a1a1a 45%,
+            rgba(26, 26, 26, 0) 50%
+          ),
+          radial-gradient(
+            0.5em 0.5em at 1.5em 0.875em,
+            #bfdf9f 47%,
+            rgba(191, 223, 159, 0) 50%
+          ),
+          radial-gradient(
+            0.45em 0.4em at 0.875em 1.325em,
+            #404040 47%,
+            rgba(64, 64, 64, 0) 50%
+          ),
+          radial-gradient(
+            0.45em 0.4em at 1.375em 1.325em,
+            #404040 47%,
+            rgba(64, 64, 64, 0) 50%
+          ),
+          radial-gradient(
+            0.5em 0.4em at 0.925em 1.375em,
+            #1a1a1a 47%,
+            rgba(26, 26, 26, 0) 50%
+          ),
+          radial-gradient(
+            0.5em 0.4em at 1.325em 1.375em,
+            #1a1a1a 47%,
+            rgba(26, 26, 26, 0) 50%
+          ),
+          radial-gradient(
+            0.375em 0.375em at 1.125em 1.25em,
+            #e69999 47%,
+            rgba(230, 153, 153, 0) 50%
+          ),
+          radial-gradient(
+            2em 1.5em at 50% 1em,
+            #404040 47%,
+            rgba(64, 64, 64, 0) 50%
+          ),
+          radial-gradient(
+            2em 1.5em at 50% 1.1em,
+            #1a1a1a 47%,
+            rgba(26, 26, 26, 0) 50%
+          ),
+          radial-gradient(
+            0.5em 1.5em at 0.375em 0.75em,
+            #e69999 39%,
+            #404040 40% 48%,
+            rgba(64, 64, 64, 0) 50%
+          ),
+          radial-gradient(
+            0.5em 1.5em at 1.5em 0.75em,
+            #e69999 39%,
+            #404040 40% 48%,
+            rgba(64, 64, 64, 0) 50%
+          ),
+          radial-gradient(
+            0.5em 1.75em at 0.25em 1.5em,
+            #404040 47%,
+            rgba(64, 64, 64, 0) 50%
+          ),
+          radial-gradient(
+            0.5em 1.75em at 0.25em 1.6em,
+            #1a1a1a 47%,
+            rgba(26, 26, 26, 0) 50%
+          ),
+          radial-gradient(
+            0.5em 1.75em at 0.65em 1.6em,
+            #1a1a1a 47%,
+            rgba(26, 26, 26, 0) 50%
+          );
+        background-repeat: no-repeat;
+        border: 0;
+        width: 2em;
+        height: 2.5em;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+      }
+    </style>
+  </head>
+  <body>
+    <form>
+      <label for="longcat1">Longcat 1</label>
+      <input
+        type="range"
+        id="longcat1"
+        name="longcat1"
+        min="0"
+        max="5"
+        value="3"
+      />
+      <br />
+      <label for="tacgnol1">Tacgnol 1</label>
+      <input
+        type="range"
+        id="tacgnol1"
+        name="tacgnol1"
+        min="0"
+        max="10"
+        value="5"
+      />
+      <br />
+      <label for="longcat2">Longcat 2</label>
+      <input
+        type="range"
+        id="longcat2"
+        name="longcat2"
+        min="0"
+        max="20"
+        value="10"
+      />
+      <br />
+      <label for="tacgnol2">Tacgnol 2</label>
+      <input
+        type="range"
+        id="tacgnol2"
+        name="tacgnol2"
+        min="0"
+        max="100"
+        value="50"
+      />
+    </form>
+  </body>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      let longcat1 = new LongcatRange("#longcat1"),
+        tacgnol1 = new LongcatRange("#tacgnol1", true),
+        longcat2 = new LongcatRange("#longcat2"),
+        tacgnol2 = new LongcatRange("#tacgnol2", true);
+    });
+
+    class LongcatRange {
+      constructor(qs, isDark) {
+        this.el = document.querySelector(qs);
+        this.sr = null;
+        this.fill = null;
+        this.value = null;
+
+        if (this.el) {
+          this.buildSlider(isDark);
+          this.el.addEventListener("input", this.changeValue.bind(this));
+        }
+      }
+      buildSlider(isDark) {
+        this.el.className = "longcat__input";
+        // create a div to contain the <input> and screen reader label
+        let rangeWrap = document.createElement("div");
+        rangeWrap.className = "longcat";
+        rangeWrap.classList.add(
+          `longcat--${isDark === true ? "dark" : "light"}`
+        );
+        this.el.parentElement.insertBefore(rangeWrap, this.el);
+        // screen reader label
+        this.sr = document.querySelector(`[for='${this.el.id}']`);
+        if (this.sr) {
+          this.sr.className = "longcat__sr";
+          rangeWrap.appendChild(this.sr);
+        }
+        // input after screen reader label
+        rangeWrap.appendChild(this.el);
+        // range fill
+        let rangeFill = document.createElement("span");
+        rangeFill.className = "longcat__torso";
+        rangeWrap.appendChild(rangeFill);
+        // range value
+        let rangeValue = document.createElement("span");
+        rangeValue.className = "longcat__value";
+        rangeValue.textContent = this.el.value;
+        rangeWrap.appendChild(rangeValue);
+        // initial value
+        this.fill = rangeFill;
+        this.value = rangeValue;
+        this.changeValue();
+      }
+      changeValue() {
+        // keep the value within range
+        if (+this.el.value > this.el.max) this.el.value = this.el.max;
+        else if (+this.el.value < this.el.min) this.el.value = this.el.min;
+        // width of fill
+        if (this.fill) {
+          let pct = (this.el.value - this.el.min) / (this.el.max - this.el.min),
+            fillWidth = pct * 100,
+            thumbEm = 1,
+            thumbEmPct = thumbEm * pct;
+
+          this.fill.style.width = `calc(${fillWidth}% - ${thumbEmPct}em)`;
+        }
+        // value
+        if (this.value) this.value.textContent = this.el.value;
+      }
+    }
+  </script>
+</html>
